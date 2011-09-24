@@ -108,5 +108,40 @@ $settings['resourcewatcher.upd_tpl']->fromArray(array(
     'area' => 'Update',
 ),'',true,true);
 
+$settings['resourcewatcher.pub_active']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.pub_active']->fromArray(array(
+    'key' => 'resourcewatcher.pub_active',
+    'value' => '0',
+    'xtype' => 'combo-boolean',
+    'namespace' => 'resourcewatcher',
+    'area' => 'Publish',
+),'',true,true);
+
+$settings['resourcewatcher.pub_email']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.pub_email']->fromArray(array(
+    'key' => 'resourcewatcher.pub_email',
+    'value' => '',
+    'xtype' => 'textfield',
+    'namespace' => 'resourcewatcher',
+    'area' => 'Publish',
+),'',true,true);
+
+$settings['resourcewatcher.pub_subject']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.pub_subject']->fromArray(array(
+    'key' => 'resourcewatcher.pub_subject',
+    'value' => 'A resource has been updated',
+    'xtype' => 'textfield',
+    'namespace' => 'resourcewatcher',
+    'area' => 'Publish',
+),'',true,true);
+
+$settings['resourcewatcher.pub_tpl']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.pub_tpl']->fromArray(array(
+    'key' => 'resourcewatcher.pub_tpl',
+    'value' => '',
+    'xtype' => 'textfield',
+    'namespace' => 'resourcewatcher',
+    'area' => 'Publish',
+),'',true,true);
 
 return $settings;

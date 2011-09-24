@@ -50,6 +50,11 @@ class ResourceWatcher {
                 if (!$this->modx->getOption('resourcewatcher.upd_active')) break;
                 $this->_create($params);
                 break;
+				
+            case 'pub':
+                if (!$this->modx->getOption('resourcewatcher.pub_active')) break;
+                $this->_publish($params);
+                break;
 
             default: break;
         }
@@ -68,6 +73,14 @@ class ResourceWatcher {
         $email = $this->modx->getOption('resourcewatcher.upd_email');
         $subject = $this->modx->getOption('resourcewatcher.upd_subject');
         $tpl = $this->modx->getOption('resourcewatcher.upd_tpl');
+        $this->_setPlaceholders($params);
+        $message = (!$tpl) ? 'I am the default message!' :  $this->modx->getChunk($tpl);
+        $this->_sendInfos($email, $subject, $message);
+    }
+    private function _publish($params) {
+        $email = $this->modx->getOption('resourcewatcher.pub_email');
+        $subject = $this->modx->getOption('resourcewatcher.pub_subject');
+        $tpl = $this->modx->getOption('resourcewatcher.pub_tpl');
         $this->_setPlaceholders($params);
         $message = (!$tpl) ? 'I am the default message!' :  $this->modx->getChunk($tpl);
         $this->_sendInfos($email, $subject, $message);

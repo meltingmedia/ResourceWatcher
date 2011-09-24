@@ -14,4 +14,11 @@ $events['OnDocFormSave']->fromArray(array(
     'propertyset' => 0,
 ),'',true,true);
 
+$events['OnDocPublished']= $modx->newObject('modPluginEvent');
+$events['OnDocPublished']->fromArray(array(
+    'event' => 'OnDocPublished',
+    'priority' => 0,
+    'propertyset' => 0,
+),'',true,true);
+
 return $events;
