@@ -54,6 +54,15 @@ $settings['resourcewatcher.new_email']->fromArray(array(
     'area' => 'New',
 ),'',true,true);
 
+$settings['resourcewatcher.new_hooks']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.new_hooks']->fromArray(array(
+    'key' => 'resourcewatcher.new_hooks',
+    'value' => '',
+    'xtype' => 'textfield',
+    'namespace' => 'resourcewatcher',
+    'area' => 'New',
+),'',true,true);
+
 $settings['resourcewatcher.new_subject']= $modx->newObject('modSystemSetting');
 $settings['resourcewatcher.new_subject']->fromArray(array(
     'key' => 'resourcewatcher.new_subject',
@@ -84,6 +93,15 @@ $settings['resourcewatcher.upd_active']->fromArray(array(
 $settings['resourcewatcher.upd_email']= $modx->newObject('modSystemSetting');
 $settings['resourcewatcher.upd_email']->fromArray(array(
     'key' => 'resourcewatcher.upd_email',
+    'value' => '',
+    'xtype' => 'textfield',
+    'namespace' => 'resourcewatcher',
+    'area' => 'Update',
+),'',true,true);
+
+$settings['resourcewatcher.upd_hooks']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.upd_hooks']->fromArray(array(
+    'key' => 'resourcewatcher.upd_hooks',
     'value' => '',
     'xtype' => 'textfield',
     'namespace' => 'resourcewatcher',

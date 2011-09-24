@@ -40,23 +40,40 @@ class ResourceWatcher {
         $this->modx->addPackage('resourcewatcher', $this->config['modelPath']);
         $this->modx->lexicon->load('resourcewatcher:default');
     }
-    public function getParams(array $params) {
+    public function init(array $params = array()) {
         $mode = $params['mode'];
-        switch ($mode) {
-            case 'upd':
-                if (!$this->modx->getOption('resourcewatcher.upd_active')) break;
-                $this->_update($params);
-                break;
-
-            case 'new':
-                if (!$this->modx->getOption('resourcewatcher.upd_active')) break;
-                $this->_create($params);
-                break;
-
-            default: break;
-        }
+        if (!$mode) return;
+        if (!$this->modx->getOption('resourcewatcher.'.$mode.'_active')) return;
+        $this->_run($params, $mode);
     }
-    private function _setPlaceholders($params) {
+    private function _run(array $params = array(), $mode) {
+        $email = $this->modx->getOption('resourcewatcher.'.$mode.'_email');
+        $subject = $this->modx->getOption('resourcewatcher.'.$mode.'_subject');
+        $tpl = $this->modx->getOption('resourcewatcher.'.$mode.'_tpl');
+        $hooks = $this->modx->getOption('resourcewatcher.'.$mode.'_hooks');
+        // Let's use hooks if any
+        if ($hooks) {
+            // We found some, let's run them
+            if ($this->_hook($hooks, $params) != true) {
+                // A hook returned false, stop everything
+                return;
+            }
+        }
+        $this->_setPlaceholders($params);
+        $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
+        $this->_sendInfos($email, $subject, $message);
+    }
+    private function _hook($hooks, array $params = array()) {
+        $hooks = explode(',', $hooks);
+        foreach ($hooks as $hook) {
+            $hook = trim($hook);
+            $isValid = $this->modx->getObject('modSnippet', array('name' => $hook));
+            if (!$isValid) return false;
+            if ($this->modx->runSnippet($hook, $params) != true) return false;
+        }
+        return true;
+    }
+    private function _setPlaceholders(array $params = array()) {
         $prefix = $this->modx->getOption('resourcewatcher.prefix') ? $this->modx->getOption('resourcewatcher.prefix') : 'rw.';
         $resource = $params['resource'];
         $user = $this->modx->user;
@@ -65,22 +82,6 @@ class ResourceWatcher {
         $this->modx->setPlaceholders($user, $prefix);
         $this->modx->setPlaceholders($profile, $prefix);
         $this->modx->setPlaceholder($prefix.'id', $params['id']);
-    }
-    private function _update($params) {
-        $email = $this->modx->getOption('resourcewatcher.upd_email');
-        $subject = $this->modx->getOption('resourcewatcher.upd_subject');
-        $tpl = $this->modx->getOption('resourcewatcher.upd_tpl');
-        $this->_setPlaceholders($params);
-        $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
-        $this->_sendInfos($email, $subject, $message);
-    }
-    private function _create($params) {
-        $email = $this->modx->getOption('resourcewatcher.new_email');
-        $subject = $this->modx->getOption('resourcewatcher.new_subject');
-        $tpl = $this->modx->getOption('resourcewatcher.new_tpl');
-        $this->_setPlaceholders($params);
-        $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
-        $this->_sendInfos($email, $subject, $message);
     }
     private function _sendInfos($email, $subject, $message) {
         $emails = explode(',', $email);

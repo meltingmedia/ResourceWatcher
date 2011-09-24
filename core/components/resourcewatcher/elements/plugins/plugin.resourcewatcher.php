@@ -5,9 +5,15 @@ if ($modx->context->get('key') != 'mgr') return;
 $ResourceWatcher = $modx->getService('resourcewatcher', 'ResourceWatcher', $modx->getOption('resourcewatcher.core_path', null, $modx->getOption('core_path').'components/resourcewatcher/').'model/resourcewatcher/', $scriptProperties);
 if (!($ResourceWatcher instanceof ResourceWatcher)) return '';
 
-switch ($modx->event->name) {
+$e = $modx->event->name;
+
+switch ($e) {
+    /*case 'OnBeforeDocFormSave':
+        $ResourceWatcher->init($e, $modx->event->params);
+        break;*/
+
     case 'OnDocFormSave':
-        $ResourceWatcher->getParams($modx->event->params);
+        $ResourceWatcher->init($modx->event->params);
         break;
 
     default:
