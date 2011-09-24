@@ -9,7 +9,9 @@ switch ($e = $modx->event->name) {
     case 'OnDocFormSave':
         $ResourceWatcher->getParams($modx->event->params);
         break;
-
+    case 'OnDocPublished':
+        $ResourceWatcher->getParams(array("mode" => "pub"));
+        break;
     default:
         break;
 }
