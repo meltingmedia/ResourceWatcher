@@ -2,6 +2,13 @@
 Changelog for ResourceWatcher.
 --------------------------------------------------------------------------------
 
+2011/09/xx: v1.0.0-rc2
+========================================================
+- Multi recipients support
+- Ability to use fiels as chunks (+ 2 default message
+  chunks) via @splittingred getChunk method
+- Added settings descriptions
+
 2011/09/24: v1.0.0-rc1
 ========================================================
 - Initial release.

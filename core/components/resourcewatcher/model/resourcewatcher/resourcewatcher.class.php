@@ -71,7 +71,7 @@ class ResourceWatcher {
         $subject = $this->modx->getOption('resourcewatcher.upd_subject');
         $tpl = $this->modx->getOption('resourcewatcher.upd_tpl');
         $this->_setPlaceholders($params);
-        $message = (!$tpl) ? 'I am the default message!' :  $this->getChunk($tpl);
+        $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
         $this->_sendInfos($email, $subject, $message);
     }
     private function _create($params) {
@@ -79,7 +79,7 @@ class ResourceWatcher {
         $subject = $this->modx->getOption('resourcewatcher.new_subject');
         $tpl = $this->modx->getOption('resourcewatcher.new_tpl');
         $this->_setPlaceholders($params);
-        $message = (!$tpl) ? 'I am the default message!' :  $this->getChunk($tpl);
+        $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
         $this->_sendInfos($email, $subject, $message);
     }
     private function _sendInfos($email, $subject, $message) {
