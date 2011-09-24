@@ -33,6 +33,8 @@ class ResourceWatcher {
         $this->config = array_merge(array(
             'corePath' => $corePath,
             'modelPath' => $corePath.'model/',
+            'chunksPath' => $corePath.'elements/chunks/',
+            'chunkSuffix' => '.chunk.tpl',
         ),$config);
 
         $this->modx->addPackage('resourcewatcher', $this->config['modelPath']);
@@ -69,7 +71,7 @@ class ResourceWatcher {
         $subject = $this->modx->getOption('resourcewatcher.upd_subject');
         $tpl = $this->modx->getOption('resourcewatcher.upd_tpl');
         $this->_setPlaceholders($params);
-        $message = (!$tpl) ? 'I am the default message!' :  $this->modx->getChunk($tpl);
+        $message = (!$tpl) ? 'I am the default message!' :  $this->getChunk($tpl);
         $this->_sendInfos($email, $subject, $message);
     }
     private function _create($params) {
@@ -77,7 +79,7 @@ class ResourceWatcher {
         $subject = $this->modx->getOption('resourcewatcher.new_subject');
         $tpl = $this->modx->getOption('resourcewatcher.new_tpl');
         $this->_setPlaceholders($params);
-        $message = (!$tpl) ? 'I am the default message!' :  $this->modx->getChunk($tpl);
+        $message = (!$tpl) ? 'I am the default message!' :  $this->getChunk($tpl);
         $this->_sendInfos($email, $subject, $message);
     }
     private function _sendInfos($email, $subject, $message) {
@@ -94,5 +96,51 @@ class ResourceWatcher {
             $this->modx->log(modX::LOG_LEVEL_ERROR, 'An error occurred while trying to send the email: '.$this->modx->mail->mailer->ErrorInfo);
         }
         $this->modx->mail->reset();
+    }
+    /**
+     * Gets a Chunk and caches it; also falls back to file-based templates
+     * for easier debugging.
+     *
+     * @access public
+     * @param string $name The name of the Chunk
+     * @param array $properties The properties for the Chunk
+     * @return string The processed content of the Chunk
+     */
+    public function getChunk($name, array $properties = array()) {
+        $chunk = null;
+        if (!isset($this->chunks[$name])) {
+            $chunk = $this->modx->getObject('modChunk', array('name' => $name), true);
+            if (empty($chunk)) {
+                $chunk = $this->_getTplChunk($name, $this->config['chunkSuffix']);
+                if ($chunk == false) return false;
+            }
+            $this->chunks[$name] = $chunk->getContent();
+        } else {
+            $o = $this->chunks[$name];
+            $chunk = $this->modx->newObject('modChunk');
+            $chunk->setContent($o);
+        }
+        $chunk->setCacheable(false);
+        return $chunk->process($properties);
+    }
+    /**
+     * Returns a modChunk object from a template file.
+     *
+     * @access private
+     * @param string $name The name of the Chunk. Will parse to name.chunk.tpl by default.
+     * @param string $suffix The suffix to add to the chunk filename.
+     * @return modChunk/boolean Returns the modChunk object if found, otherwise
+     * false.
+     */
+    private function _getTplChunk($name, $suffix = '.chunk.tpl') {
+        $chunk = false;
+        $f = $this->config['chunksPath'].strtolower($name).$suffix;
+        if (file_exists($f)) {
+            $o = file_get_contents($f);
+            $chunk = $this->modx->newObject('modChunk');
+            $chunk->set('name', $name);
+            $chunk->setContent($o);
+        }
+        return $chunk;
     }
 }

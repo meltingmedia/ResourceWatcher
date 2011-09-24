@@ -1,0 +1,1 @@
+Hey, a resource (with ID [[+rw.id]]) has been created by [[+rw.username]]
