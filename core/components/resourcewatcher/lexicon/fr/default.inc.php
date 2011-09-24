@@ -33,8 +33,8 @@ $_lang['setting_resourcewatcher.prefix_desc'] = 'Le préfixe utilisé pour les p
 
 $_lang['setting_resourcewatcher.new_active'] = 'Actif lors de la création de ressource';
 $_lang['setting_resourcewatcher.new_active_desc'] = 'Défini si le plugin est actif lors de création de ressource';
-$_lang['setting_resourcewatcher.new_email'] = 'Adresse e-mail';
-$_lang['setting_resourcewatcher.new_email_desc'] = 'L\'adresse e-mail à laquelle envoyer les notifications de création de ressource';
+$_lang['setting_resourcewatcher.new_email'] = 'Adresse(s) e-mail';
+$_lang['setting_resourcewatcher.new_email_desc'] = 'L\'adresse e-mail (ou liste d\'addresses, séparées par des virgules) à laquelle envoyer les notifications de création de ressource';
 $_lang['setting_resourcewatcher.new_subject'] = 'Sujet du mail';
 $_lang['setting_resourcewatcher.new_subject_desc'] = 'Le sujet des e-mails de notification';
 $_lang['setting_resourcewatcher.new_tpl'] = 'Chunk de message';
@@ -42,8 +42,8 @@ $_lang['setting_resourcewatcher.new_tpl_desc'] = 'Le nom du chunk à utiliser co
 
 $_lang['setting_resourcewatcher.upd_active'] = 'Actif lors de la mise à jour de ressource';
 $_lang['setting_resourcewatcher.upd_active_desc'] = 'Défini si le plugin est actif lors de mise à jour de ressource';
-$_lang['setting_resourcewatcher.upd_email'] = 'Adresse e-mail';
-$_lang['setting_resourcewatcher.upd_email_desc'] = 'L\'adresse e-mail à laquelle envoyer les notifications de mise à jour de ressource';
+$_lang['setting_resourcewatcher.upd_email'] = 'Adresse(s) e-mail';
+$_lang['setting_resourcewatcher.upd_email_desc'] = 'L\'adresse e-mail (ou liste d\'addresses, séparées par des virgules) à laquelle envoyer les notifications de mise à jour de ressource';
 $_lang['setting_resourcewatcher.upd_subject'] = 'Sujet du mail';
 $_lang['setting_resourcewatcher.upd_subject_desc'] = 'Le sujet des e-mails de notification';
 $_lang['setting_resourcewatcher.upd_tpl'] = 'Chunk de message';

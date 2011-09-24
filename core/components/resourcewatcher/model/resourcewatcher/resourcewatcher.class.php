@@ -83,13 +83,18 @@ class ResourceWatcher {
         $this->_sendInfos($email, $subject, $message);
     }
     private function _sendInfos($email, $subject, $message) {
+        $emails = explode(',', $email);
         $this->modx->getService('mail', 'mail.modPHPMailer');
         $this->modx->mail->set(modMail::MAIL_BODY, $message);
         $this->modx->mail->set(modMail::MAIL_FROM, $this->modx->getOption('emailsender'));
         $this->modx->mail->set(modMail::MAIL_FROM_NAME, $this->modx->getOption('site_name'));
         $this->modx->mail->set(modMail::MAIL_SENDER, $this->modx->getOption('site_name'));
         $this->modx->mail->set(modMail::MAIL_SUBJECT, $subject);
-        $this->modx->mail->address('to', $email);
+        foreach ($emails as $mail) {
+            // @TODO: do some mail address validation
+            $mail = trim($mail);
+            $this->modx->mail->address('to', $mail);
+        }
         //$modx->mail->address('reply-to', 'me@xexample.org');
         $this->modx->mail->setHTML(true);
         if (!$this->modx->mail->send()) {
