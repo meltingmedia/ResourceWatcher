@@ -5,8 +5,14 @@ and/or creation.
 
 ## Configuration
 
-Either install from the package manager or run the build script.
-Configure the plugin behavior in the system settings (resourcewatcher namespace).
+- Either install from the package manager or run the build script.
+- Configure the plugin behavior in the system settings (resourcewatcher namespace).
+
+Notes: Sender name & email address used to send emails are respectively
+site_name & emailsender values (defined in your system settings).
+
+By default, all resources are "monitored" (in any context). You can add constraints
+using "hooks" (snippets).
 
 ## Support
 

@@ -2,8 +2,8 @@
 /**
  * ChildOnly
  *
- * A hook to send notification emails only if the resource is a
- * direct child of a given parent
+ * A sample hook to send notification emails only if the resource is a
+ * direct child of a given parent.
  */
 
 $resource = $scriptProperties['resource'];

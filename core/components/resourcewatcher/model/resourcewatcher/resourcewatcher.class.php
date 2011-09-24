@@ -40,12 +40,25 @@ class ResourceWatcher {
         $this->modx->addPackage('resourcewatcher', $this->config['modelPath']);
         $this->modx->lexicon->load('resourcewatcher:default');
     }
+    /**
+     * Initialize the execution if set in the system settings
+     *
+     * @param array $params
+     * @return
+     */
     public function init(array $params = array()) {
         $mode = $params['mode'];
         if (!$mode) return;
         if (!$this->modx->getOption('resourcewatcher.'.$mode.'_active')) return;
         $this->_run($params, $mode);
     }
+    /**
+     * Execution
+     *
+     * @param array $params
+     * @param $mode
+     * @return
+     */
     private function _run(array $params = array(), $mode) {
         $email = $this->modx->getOption('resourcewatcher.'.$mode.'_email');
         $subject = $this->modx->getOption('resourcewatcher.'.$mode.'_subject');
@@ -63,6 +76,13 @@ class ResourceWatcher {
         $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
         $this->_sendInfos($email, $subject, $message);
     }
+    /**
+     * Manage hooks
+     *
+     * @param $hooks
+     * @param array $params
+     * @return bool
+     */
     private function _hook($hooks, array $params = array()) {
         $hooks = explode(',', $hooks);
         foreach ($hooks as $hook) {
@@ -73,8 +93,14 @@ class ResourceWatcher {
         }
         return true;
     }
+    /**
+     * Sets some basic placeholders
+     *
+     * @param array $params
+     * @return void
+     */
     private function _setPlaceholders(array $params = array()) {
-        $prefix = $this->modx->getOption('resourcewatcher.prefix') ? $this->modx->getOption('resourcewatcher.prefix') : 'rw.';
+        $prefix = $this->modx->getOption('resourcewatcher.prefix');
         $resource = $params['resource'];
         $user = $this->modx->user;
         $profile = $user->getOne('Profile');
@@ -83,6 +109,14 @@ class ResourceWatcher {
         $this->modx->setPlaceholders($profile, $prefix);
         $this->modx->setPlaceholder($prefix.'id', $params['id']);
     }
+    /**
+     * Sends the mails
+     *
+     * @param $email
+     * @param $subject
+     * @param $message
+     * @return void
+     */
     private function _sendInfos($email, $subject, $message) {
         $emails = explode(',', $email);
         $this->modx->getService('mail', 'mail.modPHPMailer');
