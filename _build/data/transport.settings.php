@@ -66,7 +66,7 @@ $settings['resourcewatcher.new_subject']->fromArray(array(
 $settings['resourcewatcher.new_tpl']= $modx->newObject('modSystemSetting');
 $settings['resourcewatcher.new_tpl']->fromArray(array(
     'key' => 'resourcewatcher.new_tpl',
-    'value' => '',
+    'value' => 'message-create',
     'xtype' => 'textfield',
     'namespace' => 'resourcewatcher',
     'area' => 'New',
@@ -102,7 +102,7 @@ $settings['resourcewatcher.upd_subject']->fromArray(array(
 $settings['resourcewatcher.upd_tpl']= $modx->newObject('modSystemSetting');
 $settings['resourcewatcher.upd_tpl']->fromArray(array(
     'key' => 'resourcewatcher.upd_tpl',
-    'value' => '',
+    'value' => 'message-update',
     'xtype' => 'textfield',
     'namespace' => 'resourcewatcher',
     'area' => 'Update',
