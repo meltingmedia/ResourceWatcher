@@ -9,7 +9,7 @@ $events = array();
 
 $events['OnBeforeDocFormSave']= $modx->newObject('modPluginEvent');
 $events['OnBeforeDocFormSave']->fromArray(array(
-    'event' => 'OnDocFormSave',
+    'event' => 'OnBeforeDocFormSave',
     'priority' => 0,
     'propertyset' => 0,
 ),'',true,true);

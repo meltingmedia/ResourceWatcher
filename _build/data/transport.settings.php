@@ -101,7 +101,7 @@ $settings['resourcewatcher.pub_email']->fromArray(array(
 
 $settings['resourcewatcher.pub_hooks']= $modx->newObject('modSystemSetting');
 $settings['resourcewatcher.pub_hooks']->fromArray(array(
-    'key' => 'resourcewatcher.new_hooks',
+    'key' => 'resourcewatcher.pub_hooks',
     'value' => '',
     'xtype' => 'textfield',
     'namespace' => 'resourcewatcher',
