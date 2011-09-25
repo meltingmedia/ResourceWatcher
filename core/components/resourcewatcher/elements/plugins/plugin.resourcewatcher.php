@@ -8,12 +8,20 @@ if (!($ResourceWatcher instanceof ResourceWatcher)) return '';
 $e = $modx->event->name;
 
 switch ($e) {
-    /*case 'OnBeforeDocFormSave':
-        $ResourceWatcher->init($e, $modx->event->params);
-        break;*/
+    case 'OnBeforeDocFormSave':
+        $ResourceWatcher->setState($modx->event->params);
+        break;
 
     case 'OnDocFormSave':
         $ResourceWatcher->init($modx->event->params);
+        break;
+
+    case 'OnDocPublished':
+        $ResourceWatcher->pubState(1, $modx->event->params);
+        break;
+
+    case 'OnDocUnPublished':
+        $ResourceWatcher->pubState(0, $modx->event->params);
         break;
 
     default:

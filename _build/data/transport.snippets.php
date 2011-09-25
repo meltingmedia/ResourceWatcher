@@ -38,4 +38,15 @@ $properties = include $sources['build'].'properties/properties.rw.childonly.php'
 $snippets[0]->setProperties($properties);
 unset($properties);
 
+$snippets[1]= $modx->newObject('modSnippet');
+$snippets[1]->fromArray(array(
+    'id' => 1,
+    'name' => 'rw.PublishOnly',
+    'description' => 'Hook for ResourceWatcher',
+    'snippet' => getSnippetContent($sources['snippets'].'snippet.rw.publishonly.php'),
+),'',true,true);
+/*$properties = include $sources['build'].'properties/properties.rw.childonly.php';
+$snippets[0]->setProperties($properties);
+unset($properties);*/
+
 return $snippets;

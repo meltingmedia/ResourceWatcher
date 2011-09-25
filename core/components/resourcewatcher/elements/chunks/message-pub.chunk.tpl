@@ -1,0 +1,1 @@
+Hey, the resource (with ID [[+rw.id]]) has been [[+rw.state]] by [[+rw.username]]

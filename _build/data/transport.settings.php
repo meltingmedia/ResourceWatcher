@@ -81,6 +81,51 @@ $settings['resourcewatcher.new_tpl']->fromArray(array(
     'area' => 'New',
 ),'',true,true);
 
+$settings['resourcewatcher.pub_active']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.pub_active']->fromArray(array(
+    'key' => 'resourcewatcher.pub_active',
+    'value' => '0',
+    'xtype' => 'combo-boolean',
+    'namespace' => 'resourcewatcher',
+    'area' => 'Pub',
+),'',true,true);
+
+$settings['resourcewatcher.pub_email']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.pub_email']->fromArray(array(
+    'key' => 'resourcewatcher.pub_email',
+    'value' => '',
+    'xtype' => 'textfield',
+    'namespace' => 'resourcewatcher',
+    'area' => 'Pub',
+),'',true,true);
+
+$settings['resourcewatcher.pub_hooks']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.pub_hooks']->fromArray(array(
+    'key' => 'resourcewatcher.new_hooks',
+    'value' => '',
+    'xtype' => 'textfield',
+    'namespace' => 'resourcewatcher',
+    'area' => 'Pub',
+),'',true,true);
+
+$settings['resourcewatcher.pub_subject']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.pub_subject']->fromArray(array(
+    'key' => 'resourcewatcher.pub_subject',
+    'value' => 'A resource state has been modified',
+    'xtype' => 'textfield',
+    'namespace' => 'resourcewatcher',
+    'area' => 'Pub',
+),'',true,true);
+
+$settings['resourcewatcher.pub_tpl']= $modx->newObject('modSystemSetting');
+$settings['resourcewatcher.pub_tpl']->fromArray(array(
+    'key' => 'resourcewatcher.pub_tpl',
+    'value' => 'message-pub',
+    'xtype' => 'textfield',
+    'namespace' => 'resourcewatcher',
+    'area' => 'Pub',
+),'',true,true);
+
 $settings['resourcewatcher.upd_active']= $modx->newObject('modSystemSetting');
 $settings['resourcewatcher.upd_active']->fromArray(array(
     'key' => 'resourcewatcher.upd_active',

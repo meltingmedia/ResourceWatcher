@@ -48,9 +48,40 @@ class ResourceWatcher {
      */
     public function init(array $params = array()) {
         $mode = $params['mode'];
+        $this->_checkState($params);
         if (!$mode) return;
         if (!$this->modx->getOption('resourcewatcher.'.$mode.'_active')) return;
         $this->_run($params, $mode);
+    }
+    public function setState($params) {
+        if (!$this->modx->getOption('resourcewatcher.pub_active')) return;
+        //if (!$this->_runHooks('pub', $params)) return;
+        $_SESSION['rw.state'] = '';
+        $resource = $this->modx->getObject('modResource', $params['resource']->get('id'));
+        $_SESSION['rw.state'] = $resource->get('published');
+    }
+    private function _checkState($params) {
+        if (!$this->modx->getOption('resourcewatcher.pub_active')) return;
+        if (!$this->_runHooks('pub', $params)) return;
+        $actual = $_SESSION['rw.state'];
+        $future = $params['resource']->get('published');
+        if ($actual != $future) $this->pubState($future, $params);
+        $_SESSION['rw.state'] = '';
+    }
+    public function pubState($state, $params) {
+        if (!$this->modx->getOption('resourcewatcher.pub_active')) return;
+        if (!$this->_runHooks('pub', $params)) return;
+        $prefix = $this->modx->getOption('resourcewatcher.prefix');
+        $state = $state ? 'published' : 'unpublished';
+        $email = $this->modx->getOption('resourcewatcher.pub_email');
+        //@TODO: find a way to use placeholders in the subject
+        $subject = $this->modx->getOption('resourcewatcher.pub_subject');
+        $tpl = $this->modx->getOption('resourcewatcher.pub_tpl');
+
+        $this->_setPlaceholders($params);
+        $this->modx->setPlaceholder($prefix.'state', $state);
+        $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
+        $this->_sendInfos($email, $subject, $message);
     }
     /**
      * Execution
@@ -60,21 +91,25 @@ class ResourceWatcher {
      * @return
      */
     private function _run(array $params = array(), $mode) {
+        if (!$this->_runHooks($mode, $params)) return;
         $email = $this->modx->getOption('resourcewatcher.'.$mode.'_email');
         $subject = $this->modx->getOption('resourcewatcher.'.$mode.'_subject');
         $tpl = $this->modx->getOption('resourcewatcher.'.$mode.'_tpl');
+        $this->_setPlaceholders($params);
+        $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
+        $this->_sendInfos($email, $subject, $message);
+    }
+    private function _runHooks($mode, $params) {
         $hooks = $this->modx->getOption('resourcewatcher.'.$mode.'_hooks');
         // Let's use hooks if any
         if ($hooks) {
             // We found some, let's run them
             if ($this->_hook($hooks, $params) != true) {
                 // A hook returned false, stop everything
-                return;
+                return false;
             }
         }
-        $this->_setPlaceholders($params);
-        $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
-        $this->_sendInfos($email, $subject, $message);
+        return true;
     }
     /**
      * Manage hooks

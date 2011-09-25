@@ -42,6 +42,17 @@ $_lang['setting_resourcewatcher.new_subject_desc'] = 'Le sujet des e-mails de no
 $_lang['setting_resourcewatcher.new_tpl'] = 'Chunk de message';
 $_lang['setting_resourcewatcher.new_tpl_desc'] = 'Le nom du chunk à utiliser comme contenu de l\'e-mail de notification';
 
+$_lang['setting_resourcewatcher.pub_active'] = 'Actif d\'un changement de statut de ressource';
+$_lang['setting_resourcewatcher.pub_active_desc'] = 'Défini si le plugin est actif lors de la publication ou dé-publication de resource';
+$_lang['setting_resourcewatcher.pub_email'] = 'Adresse(s) e-mail';
+$_lang['setting_resourcewatcher.pub_email_desc'] = 'L\'adresse e-mail (ou liste d\'addresses, séparées par des virgules) à laquelle envoyer les notifications de changement de statut';
+$_lang['setting_resourcewatcher.pub_hooks'] = 'Hooks';
+$_lang['setting_resourcewatcher.pub_hooks_desc'] = 'Liste de hooks, séparés par des virgules, devant être éxecutés';
+$_lang['setting_resourcewatcher.pub_subject'] = 'Sujet du mail';
+$_lang['setting_resourcewatcher.pub_subject_desc'] = 'Le sujet des e-mails de notification';
+$_lang['setting_resourcewatcher.pub_tpl'] = 'Chunk de message';
+$_lang['setting_resourcewatcher.pub_tpl_desc'] = 'Le nom du chunk à utiliser comme contenu de l\'e-mail de notification';
+
 $_lang['setting_resourcewatcher.upd_active'] = 'Actif lors de la mise à jour de ressource';
 $_lang['setting_resourcewatcher.upd_active_desc'] = 'Défini si le plugin est actif lors de mise à jour de ressource';
 $_lang['setting_resourcewatcher.upd_email'] = 'Adresse(s) e-mail';

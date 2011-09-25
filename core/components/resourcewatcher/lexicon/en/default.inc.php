@@ -42,6 +42,17 @@ $_lang['setting_resourcewatcher.new_subject_desc'] = 'The subject of the notific
 $_lang['setting_resourcewatcher.new_tpl'] = 'Message Chunk';
 $_lang['setting_resourcewatcher.new_tpl_desc'] = 'The chunk name to be used as the main content of the notification mail';
 
+$_lang['setting_resourcewatcher.pub_active'] = 'Active on publish/unpublish';
+$_lang['setting_resourcewatcher.pub_active_desc'] = 'Define if the plugin is active upon resource publication/unpublication';
+$_lang['setting_resourcewatcher.pub_email'] = 'Mail address(es)';
+$_lang['setting_resourcewatcher.pub_email_desc'] = 'The mail address (or comma separated list) to send the notification to';
+$_lang['setting_resourcewatcher.pub_hooks'] = 'Hooks';
+$_lang['setting_resourcewatcher.pub_hooks_desc'] = 'Hooks, comma separated, to be run';
+$_lang['setting_resourcewatcher.pub_subject'] = 'Mail subject';
+$_lang['setting_resourcewatcher.pub_subject_desc'] = 'The subject of the notification mail';
+$_lang['setting_resourcewatcher.pub_tpl'] = 'Message Chunk';
+$_lang['setting_resourcewatcher.pub_tpl_desc'] = 'The chunk name to be used as the main content of the notification mail';
+
 $_lang['setting_resourcewatcher.upd_active'] = 'Active on resource update';
 $_lang['setting_resourcewatcher.upd_active_desc'] = 'Define if the plugin is active upon resource update';
 $_lang['setting_resourcewatcher.upd_email'] = 'Mail address(es)';
