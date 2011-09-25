@@ -35,7 +35,7 @@ class ResourceWatcher {
             'modelPath' => $corePath.'model/',
             'chunksPath' => $corePath.'elements/chunks/',
             'chunkSuffix' => '.chunk.tpl',
-        ),$config);
+        ), $config);
 
         $this->modx->addPackage('resourcewatcher', $this->config['modelPath']);
         $this->modx->lexicon->load('resourcewatcher:default');
@@ -48,40 +48,55 @@ class ResourceWatcher {
      */
     public function init(array $params = array()) {
         $mode = $params['mode'];
-        $this->_checkState($params);
         if (!$mode) return;
+        if ($this->modx->getOption('resourcewatcher.pub_active') && $mode == 'upd') {
+            if ($this->_checkState($params)) $this->pubState($params);
+            if ($this->_checkState($params) && $this->modx->getOption('resourcewatcher.'.$mode.'_active')) return;
+        }
         if (!$this->modx->getOption('resourcewatcher.'.$mode.'_active')) return;
         $this->_run($params, $mode);
     }
+    /**
+     * Set the resource status (0 = unpublished, 1 = published)
+     *
+     * @param array $params
+     * @return void
+     */
     public function setState($params) {
-        if (!$this->modx->getOption('resourcewatcher.pub_active')) return;
+        if (!$this->modx->getOption('resourcewatcher.pub_active') || $params['mode'] == 'new') return;
         //if (!$this->_runHooks('pub', $params)) return;
         $_SESSION['rw.state'] = '';
         $resource = $this->modx->getObject('modResource', $params['resource']->get('id'));
         $_SESSION['rw.state'] = $resource->get('published');
     }
+    /**
+     * Check if the resource state is changed
+     *
+     * @param array $params
+     * @return bool
+     */
     private function _checkState($params) {
-        if (!$this->modx->getOption('resourcewatcher.pub_active')) return;
-        if (!$this->_runHooks('pub', $params)) return;
-        $actual = $_SESSION['rw.state'];
-        $future = $params['resource']->get('published');
-        if ($actual != $future) $this->pubState($future, $params);
-        $_SESSION['rw.state'] = '';
+        if ($this->modx->getOption('resourcewatcher.pub_active')) {
+            if (!$this->_runHooks('pub', $params)) return;
+            $actual = $_SESSION['rw.state'];
+            $future = $params['resource']->get('published');
+            if ($actual == $future) {
+                // No change
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
-    public function pubState($state, $params) {
+    /**
+     * Sends the status change notification email
+     *
+     * @param array $params
+     * @return void
+     */
+    public function pubState(array $params = array()) {
         if (!$this->modx->getOption('resourcewatcher.pub_active')) return;
-        if (!$this->_runHooks('pub', $params)) return;
-        $prefix = $this->modx->getOption('resourcewatcher.prefix');
-        $state = $state ? 'published' : 'unpublished';
-        $email = $this->modx->getOption('resourcewatcher.pub_email');
-        //@TODO: find a way to use placeholders in the subject
-        $subject = $this->modx->getOption('resourcewatcher.pub_subject');
-        $tpl = $this->modx->getOption('resourcewatcher.pub_tpl');
-
-        $this->_setPlaceholders($params);
-        $this->modx->setPlaceholder($prefix.'state', $state);
-        $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
-        $this->_sendInfos($email, $subject, $message);
+        $this->_run($params, 'pub');
     }
     /**
      * Execution
@@ -99,6 +114,13 @@ class ResourceWatcher {
         $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
         $this->_sendInfos($email, $subject, $message);
     }
+    /**
+     * Execute the hooks (if any) and return the results
+     *
+     * @param string $mode
+     * @param array $params
+     * @return bool
+     */
     private function _runHooks($mode, $params) {
         $hooks = $this->modx->getOption('resourcewatcher.'.$mode.'_hooks');
         // Let's use hooks if any
@@ -114,7 +136,7 @@ class ResourceWatcher {
     /**
      * Manage hooks
      *
-     * @param $hooks
+     * @param string $hooks
      * @param array $params
      * @return bool
      */
@@ -139,10 +161,10 @@ class ResourceWatcher {
         $resource = $params['resource'];
         $user = $this->modx->user;
         $profile = $user->getOne('Profile');
-        $this->modx->setPlaceholders($resource, $prefix);
-        $this->modx->setPlaceholders($user, $prefix);
-        $this->modx->setPlaceholders($profile, $prefix);
-        $this->modx->setPlaceholder($prefix.'id', $params['id']);
+        $id = array('id' => $params['id']);
+
+        $phs = array_merge($resource->toArray(), $user->toArray(), $profile->toArray(), $id);
+        $this->modx->setPlaceholders($phs, $prefix);
     }
     /**
      * Sends the mails
@@ -154,6 +176,7 @@ class ResourceWatcher {
      */
     private function _sendInfos($email, $subject, $message) {
         $emails = explode(',', $email);
+        //$this->modx->switchContext('web');
         $this->modx->getService('mail', 'mail.modPHPMailer');
         $this->modx->mail->set(modMail::MAIL_BODY, $message);
         $this->modx->mail->set(modMail::MAIL_FROM, $this->modx->getOption('emailsender'));

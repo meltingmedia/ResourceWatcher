@@ -17,11 +17,8 @@ switch ($e) {
         break;
 
     case 'OnDocPublished':
-        $ResourceWatcher->pubState(1, $modx->event->params);
-        break;
-
     case 'OnDocUnPublished':
-        $ResourceWatcher->pubState(0, $modx->event->params);
+        $ResourceWatcher->pubState($modx->event->params);
         break;
 
     default:

@@ -26,6 +26,8 @@
  * @subpackage lexicon
  */
 $_lang['resourcewatcher.mail_subject_update'] = 'Une ressource a été mise à jour.';
+$_lang['resourcewatcher.published'] = 'publié';
+$_lang['resourcewatcher.unpublished'] = 'dépublié';
 
 // System Settings
 $_lang['setting_resourcewatcher.prefix'] = 'Préfixe de placeholder';
@@ -42,7 +44,7 @@ $_lang['setting_resourcewatcher.new_subject_desc'] = 'Le sujet des e-mails de no
 $_lang['setting_resourcewatcher.new_tpl'] = 'Chunk de message';
 $_lang['setting_resourcewatcher.new_tpl_desc'] = 'Le nom du chunk à utiliser comme contenu de l\'e-mail de notification';
 
-$_lang['setting_resourcewatcher.pub_active'] = 'Actif d\'un changement de statut de ressource';
+$_lang['setting_resourcewatcher.pub_active'] = 'Actif lors du changement de statut de ressource';
 $_lang['setting_resourcewatcher.pub_active_desc'] = 'Défini si le plugin est actif lors de la publication ou dé-publication de resource';
 $_lang['setting_resourcewatcher.pub_email'] = 'Adresse(s) e-mail';
 $_lang['setting_resourcewatcher.pub_email_desc'] = 'L\'adresse e-mail (ou liste d\'addresses, séparées par des virgules) à laquelle envoyer les notifications de changement de statut';
