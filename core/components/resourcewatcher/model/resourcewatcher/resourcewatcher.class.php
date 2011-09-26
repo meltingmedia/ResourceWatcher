@@ -198,8 +198,11 @@ class ResourceWatcher {
         $this->modx->mail->set(modMail::MAIL_SENDER, $this->modx->getObject('modSystemSetting', array('key' => 'site_name'))->get('value'));
         $this->modx->mail->set(modMail::MAIL_SUBJECT, $subject);
         foreach ($emails as $mail) {
-            // @TODO: do some mail address validation
             $mail = trim($mail);
+            if(!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+                $this->modx->log(modX::LOG_LEVEL_ERROR, 'Invalid email address: '.$mail);
+                return;
+            }
             $this->modx->mail->address('to', $mail);
         }
         //$modx->mail->address('reply-to', 'me@xexample.org');
