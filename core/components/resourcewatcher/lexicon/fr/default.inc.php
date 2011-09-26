@@ -26,8 +26,6 @@
  * @subpackage lexicon
  */
 $_lang['resourcewatcher.mail_subject_update'] = 'Une ressource a été mise à jour.';
-$_lang['resourcewatcher.published'] = 'publié';
-$_lang['resourcewatcher.unpublished'] = 'dépublié';
 
 // System Settings
 $_lang['setting_resourcewatcher.prefix'] = 'Préfixe de placeholder';

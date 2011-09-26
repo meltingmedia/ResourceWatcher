@@ -49,11 +49,14 @@ class ResourceWatcher {
     public function init(array $params = array()) {
         $mode = $params['mode'];
         if (!$mode) return;
-        if ($this->modx->getOption('resourcewatcher.pub_active') && $mode == 'upd') {
+        //if ($this->modx->getOption('resourcewatcher.pub_active') && $mode == 'upd') {
+        if ($this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.pub_active'))->get('value') && $mode == 'upd') {
             if ($this->_checkState($params)) $this->pubState($params);
-            if ($this->_checkState($params) && $this->modx->getOption('resourcewatcher.'.$mode.'_active')) return;
+            //if ($this->_checkState($params) && $this->modx->getOption('resourcewatcher.'.$mode.'_active')) return;
+            if ($this->_checkState($params) && $this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.'.$mode.'_active'))->get('value')) return;
         }
-        if (!$this->modx->getOption('resourcewatcher.'.$mode.'_active')) return;
+        //if (!$this->modx->getOption('resourcewatcher.'.$mode.'_active')) return;
+        if (!$this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.'.$mode.'_active'))->get('value')) return;
         $this->_run($params, $mode);
     }
     /**
@@ -63,7 +66,8 @@ class ResourceWatcher {
      * @return void
      */
     public function setState($params) {
-        if (!$this->modx->getOption('resourcewatcher.pub_active') || $params['mode'] == 'new') return;
+        //if (!$this->modx->getOption('resourcewatcher.pub_active') || $params['mode'] == 'new') return;
+        if (!$this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.pub_active'))->get('value') || $params['mode'] == 'new') return;
         //if (!$this->_runHooks('pub', $params)) return;
         $_SESSION['rw.state'] = '';
         $resource = $this->modx->getObject('modResource', $params['resource']->get('id'));
@@ -76,7 +80,8 @@ class ResourceWatcher {
      * @return bool
      */
     private function _checkState($params) {
-        if ($this->modx->getOption('resourcewatcher.pub_active')) {
+        //if ($this->modx->getOption('resourcewatcher.pub_active')) {
+        if ($this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.pub_active'))->get('value')) {
             if (!$this->_runHooks('pub', $params)) return;
             $actual = $_SESSION['rw.state'];
             $future = $params['resource']->get('published');
@@ -95,7 +100,8 @@ class ResourceWatcher {
      * @return void
      */
     public function pubState(array $params = array()) {
-        if (!$this->modx->getOption('resourcewatcher.pub_active')) return;
+        //if (!$this->modx->getOption('resourcewatcher.pub_active')) return;
+        if (!$this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.pub_active'))->get('value')) return;
         $this->_run($params, 'pub');
     }
     /**
@@ -107,9 +113,12 @@ class ResourceWatcher {
      */
     private function _run(array $params = array(), $mode) {
         if (!$this->_runHooks($mode, $params)) return;
-        $email = $this->modx->getOption('resourcewatcher.'.$mode.'_email');
-        $subject = $this->modx->getOption('resourcewatcher.'.$mode.'_subject');
-        $tpl = $this->modx->getOption('resourcewatcher.'.$mode.'_tpl');
+        //$email = $this->modx->getOption('resourcewatcher.'.$mode.'_email');
+        $email = $this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.'.$mode.'_email'))->get('value');
+        //$subject = $this->modx->getOption('resourcewatcher.'.$mode.'_subject');
+        $subject = $this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.'.$mode.'_subject'))->get('value');
+        //$tpl = $this->modx->getOption('resourcewatcher.'.$mode.'_tpl');
+        $tpl = $this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.'.$mode.'_tpl'))->get('value');
         $this->_setPlaceholders($params);
         $message = (!$tpl) ? $this->modx->log(modX::LOG_LEVEL_ERROR, 'Please define a valid chunk to use as notification message.') :  $this->getChunk($tpl);
         $this->_sendInfos($email, $subject, $message);
@@ -122,7 +131,8 @@ class ResourceWatcher {
      * @return bool
      */
     private function _runHooks($mode, $params) {
-        $hooks = $this->modx->getOption('resourcewatcher.'.$mode.'_hooks');
+        //$hooks = $this->modx->getOption('resourcewatcher.'.$mode.'_hooks');
+        $hooks = $this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.'.$mode.'_hooks'))->get('value');
         // Let's use hooks if any
         if ($hooks) {
             // We found some, let's run them
@@ -157,7 +167,8 @@ class ResourceWatcher {
      * @return void
      */
     private function _setPlaceholders(array $params = array()) {
-        $prefix = $this->modx->getOption('resourcewatcher.prefix');
+        //$prefix = $this->modx->getOption('resourcewatcher.prefix');
+        $prefix = $this->modx->getObject('modSystemSetting', array('key' => 'resourcewatcher.prefix'))->get('value');
         $resource = $params['resource'];
         $user = $this->modx->user;
         $profile = $user->getOne('Profile');
@@ -179,9 +190,12 @@ class ResourceWatcher {
         //$this->modx->switchContext('web');
         $this->modx->getService('mail', 'mail.modPHPMailer');
         $this->modx->mail->set(modMail::MAIL_BODY, $message);
-        $this->modx->mail->set(modMail::MAIL_FROM, $this->modx->getOption('emailsender'));
+        /*$this->modx->mail->set(modMail::MAIL_FROM, $this->modx->getOption('emailsender'));
         $this->modx->mail->set(modMail::MAIL_FROM_NAME, $this->modx->getOption('site_name'));
-        $this->modx->mail->set(modMail::MAIL_SENDER, $this->modx->getOption('site_name'));
+        $this->modx->mail->set(modMail::MAIL_SENDER, $this->modx->getOption('site_name'));*/
+        $this->modx->mail->set(modMail::MAIL_FROM, $this->modx->getObject('modSystemSetting', array('key' => 'emailsender'))->get('value'));
+        $this->modx->mail->set(modMail::MAIL_FROM_NAME, $this->modx->getObject('modSystemSetting', array('key' => 'site_name'))->get('value'));
+        $this->modx->mail->set(modMail::MAIL_SENDER, $this->modx->getObject('modSystemSetting', array('key' => 'site_name'))->get('value'));
         $this->modx->mail->set(modMail::MAIL_SUBJECT, $subject);
         foreach ($emails as $mail) {
             // @TODO: do some mail address validation
