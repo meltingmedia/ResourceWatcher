@@ -181,7 +181,7 @@ class ResourceWatcher {
         $this->modx->mail->set(modMail::MAIL_BODY, $message);
         $this->modx->mail->set(modMail::MAIL_FROM, $this->modx->getOption('emailsender'));
         $this->modx->mail->set(modMail::MAIL_FROM_NAME, $this->modx->getOption('site_name'));
-        $this->modx->mail->set(modMail::MAIL_SENDER, $this->modx->getOption('site_name'));
+        //$this->modx->mail->set(modMail::MAIL_SENDER, $this->modx->getOption('site_name'));
         $this->modx->mail->set(modMail::MAIL_SUBJECT, $subject);
         foreach ($emails as $mail) {
             $mail = trim($mail);

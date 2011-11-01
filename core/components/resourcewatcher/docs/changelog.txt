@@ -2,8 +2,9 @@
 Changelog for ResourceWatcher.
 --------------------------------------------------------------------------------
 
-2011/11/xx: v1.0.0-pl
+2011/11/01: v1.0.0-pl
 ========================================================
+- Removed modMail::MAIL_SENDER causing issues under IIS
 - Added email addresses validity verification using
   filter_var (so PHP 5.2.0+ required)
 - Some bug fixes to allow new/pub/upd states to play
