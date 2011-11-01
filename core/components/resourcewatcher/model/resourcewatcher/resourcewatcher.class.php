@@ -184,7 +184,6 @@ class ResourceWatcher {
         $this->modx->mail->set(modMail::MAIL_SENDER, $this->modx->getOption('site_name'));
         $this->modx->mail->set(modMail::MAIL_SUBJECT, $subject);
         foreach ($emails as $mail) {
-            // @TODO: do some mail address validation
             $mail = trim($mail);
             if(!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
                 $this->modx->log(modX::LOG_LEVEL_ERROR, 'Invalid email address: '.$mail);
